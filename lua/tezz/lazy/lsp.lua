@@ -27,6 +27,7 @@ return {
 				html = { "prettier" },
 				css = { "prettier" },
 				scss = { "prettier" },
+				proto = { "buf" },
 			},
 		})
 		vim.keymap.set("n", "<leader>ff", function()
@@ -49,6 +50,8 @@ return {
 				"lua_ls",
 				"ts_ls",
 				"gopls",
+				"tailwindcss",
+				"buf_ls",
 			},
 			handlers = {
 				function(server_name) -- default handler (optional)
@@ -56,7 +59,6 @@ return {
 						capabilities = capabilities,
 					})
 				end,
-
 				["lua_ls"] = function()
 					local lspconfig = require("lspconfig")
 					lspconfig.lua_ls.setup({
@@ -73,6 +75,9 @@ return {
 				end,
 			},
 		})
+
+		-- protobuf lsp: doesn't work within mason-lspconfig handler
+		require("lspconfig").protols.setup({})
 
 		local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
@@ -96,6 +101,14 @@ return {
 			}),
 		})
 
+		-- setup vim-dadbod
+		cmp.setup.filetype({ "sql" }, {
+			sources = {
+				{ name = "vim-dadbod-completion" },
+				{ name = "buffer" },
+			},
+		})
+
 		vim.diagnostic.config({
 			-- update_in_insert = true,
 			float = {
@@ -111,5 +124,6 @@ return {
 		vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 		vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
 		vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+		vim.keymap.set("n", "<leader>gi", vim.lsp.buf.implementation, {})
 	end,
 }
