@@ -43,7 +43,19 @@ return {
 			cmp_lsp.default_capabilities()
 		)
 
-		require("fidget").setup({})
+		require("fidget").setup({
+			notification = {
+				-- Don't hide potentially sensitive information
+				override_vim_notify = true, -- fidget takes over vim.notify
+				view = {
+					stack_upwards = false,
+				},
+				window = {
+					max_width = 60,
+					border = "rounded",
+				},
+			},
+		})
 		require("mason").setup()
 		require("mason-lspconfig").setup({
 			ensure_installed = {
@@ -52,6 +64,8 @@ return {
 				"gopls",
 				"tailwindcss",
 				"buf_ls",
+				"cssls",
+				"html",
 			},
 			handlers = {
 				function(server_name) -- default handler (optional)
